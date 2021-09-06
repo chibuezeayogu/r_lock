@@ -26,4 +26,48 @@ RSpec.describe 'App Functional Test' do
       ]
     end
   end
+
+  describe "normalize record" do
+    context "when separated by dollar sign" do
+      let(:params) { File.read('spec/fixtures/people_by_dollar.txt') }
+      subject { NormalizeController.new(params, '$') }
+
+      it "should return a normalized user data" do
+        expect(subject.process).to eq [
+          {
+            "city"=>"Los Angeles",
+            "birthdate"=>"4/30/1974",
+            "last_name"=>"Nolan",
+            "first_name"=>"Rhiannon"
+          },
+          {
+            "city"=>"New York City",
+            "birthdate"=>"1/5/1962",
+            "last_name"=>"Bruen",
+            "first_name"=>"Rigoberto"
+          }
+        ] 
+      end
+    end
+  
+    context "when separated by percent sign" do
+      let(:params) { File.read('spec/fixtures/people_by_percent.txt') }
+      subject { NormalizeController.new(params, '%') }
+
+      it "should return a normalized user data" do
+        expect(subject.process).to eq [
+          {
+            "first_name"=>"Mckayla", 
+            "city"=>"Atlanta", 
+            "birthdate"=>"5/29/1986"
+          }, 
+          {
+            "first_name"=>"Elliot", 
+            "city"=>"New York City", 
+            "birthdate"=>"5/4/1947"
+          }
+        ] 
+      end
+    end
+  end
 end
